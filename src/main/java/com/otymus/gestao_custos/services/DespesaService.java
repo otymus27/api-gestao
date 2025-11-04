@@ -6,10 +6,11 @@ import com.otymus.gestao_custos.entities.dto.DespesaDTO;
 import com.otymus.gestao_custos.repositories.DespesaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -21,8 +22,6 @@ public class DespesaService {
     public DespesaService(DespesaRepository despesaRepository) {
         this.despesaRepository = despesaRepository;
     }
-
-
 
 
     public DespesaDTO salvar(DespesaCadastroDTO dto) {
@@ -48,4 +47,22 @@ public class DespesaService {
         return new DespesaDTO(despesa.getId(),despesa.getDescricao(),despesa.getCategoria(),despesa.getDataDespesa(), despesa.getValor());
 
     }
+
+    public List<Despesa> listar() {
+        return despesaRepository.findAll();
+    }
+
+    public List<Despesa> buscarPorEmailEData(String email, LocalDate dataDespesa) {
+        List<Despesa> despesas;
+        if(dataDespesa != null){
+            despesas = despesaRepository.findByEmailAndDataDespesa(email,dataDespesa);
+        }else{
+            despesas = despesaRepository.findByEmail(email);
+        }
+        return despesas;
+    }
+
+
+
+
 }
